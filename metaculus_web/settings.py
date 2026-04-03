@@ -440,6 +440,7 @@ ALLOWED_HOSTS = [
     ".metaculus.com",
     ".up.railway.app",
     ".railway.internal",
+    "healthcheck.railway.app",
     "localhost",
     "127.0.0.1",
     "host.docker.internal",
