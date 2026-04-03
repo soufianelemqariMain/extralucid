@@ -142,3 +142,28 @@ CMD ["scripts/prod/run_dramatiq.sh"]
 
 FROM final_env AS all_runners
 CMD ["scripts/prod/run_all.sh"]
+
+# ============================================================
+# RAILWAY BACKEND-ONLY TARGET
+# Skips frontend build entirely — Next.js is deployed on Vercel
+# ============================================================
+FROM base AS django_backend
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    && apt-get clean && rm -rf /var/lib/lists/*
+
+COPY --from=backend_deps /app/venv /app/venv
+COPY --chown=1001:0 . /app/
+COPY --chown=1001:0 --from=backend_static /app/staticfiles /app/staticfiles
+
+RUN mkdir -p /home/app && chown 1001:0 /home/app
+USER 1001
+
+ENV HOME=/home/app \
+    PORT=8080 \
+    GUNICORN_WORKERS=2
+
+EXPOSE 8080
+CMD ["venv/bin/gunicorn", "metaculus_web.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "2", "--timeout", "30"]
