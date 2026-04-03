@@ -438,6 +438,8 @@ GOOGLE_CREDEBTIALS_FAB_SHEET_B64 = os.environ.get("GOOGLE_CREDEBTIALS_FAB_SHEET_
 
 ALLOWED_HOSTS = [
     ".metaculus.com",
+    ".up.railway.app",
+    ".railway.internal",
     "localhost",
     "127.0.0.1",
     "host.docker.internal",
