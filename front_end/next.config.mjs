@@ -9,7 +9,7 @@ const AWS_S3_CUSTOM_DOMAIN = process.env.AWS_S3_CUSTOM_DOMAIN;
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   trailingSlash: true,
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   env: {
     // Do not add anything here. Buildtime environment variables are deprecated
   },
@@ -18,7 +18,7 @@ const nextConfig = {
       dynamic: 30,
       static: 180,
     },
-    serverSourceMaps: true,
+    serverSourceMaps: false,
     serverActions: {
       bodySizeLimit: "3mb", // match GIF size limit on the server
     },
