@@ -91,7 +91,8 @@ RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default /e
     && mkdir -p /var/cache/nginx /var/log/nginx /var/lib/nginx \
     && touch /run/nginx.pid \
     && chown -R 1001:0 /var/cache/nginx /var/log/nginx /var/lib/nginx /run/nginx.pid /etc/nginx \
-    && chmod -R 755 /var/lib/nginx /var/log/nginx
+    && chmod 755 /etc /etc/nginx \
+    && chmod -R 755 /etc/nginx/conf.d /var/lib/nginx /var/log/nginx
 
 # Install pm2 globally
 RUN npm install -g pm2@6

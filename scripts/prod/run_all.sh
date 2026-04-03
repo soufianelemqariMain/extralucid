@@ -22,8 +22,8 @@ DRAMATIQ_THREADS="${DRAMATIQ_THREADS:-16}"
 # Propagate nginx port and app domain
 PORT="${PORT:-8080}" \
 APP_DOMAIN="${APP_DOMAIN:-}" \
-    envsubst '${PORT},${APP_DOMAIN}' </etc/nginx/http.d/app_nginx.template >/etc/nginx/http.d/app_nginx.conf
-rm -f /etc/nginx/http.d/default.conf
+    envsubst '${PORT},${APP_DOMAIN}' </etc/nginx/conf.d/app_nginx.template >/etc/nginx/conf.d/app_nginx.conf
+rm -f /etc/nginx/conf.d/default.conf
 
 export UV_THREADPOOL_SIZE=6
 export NODE_OPTIONS="--max-old-space-size=2048"
@@ -31,5 +31,5 @@ export NODE_OPTIONS="--max-old-space-size=2048"
 (python3 manage.py cron 2>&1 | sed 's/^/[Cronjob]: /') &
 (python3 manage.py rundramatiq --processes $DRAMATIQ_PROCESSES --threads $DRAMATIQ_THREADS 2>&1 | sed 's/^/[Dramatiq]: /') &
 (cd front_end && PORT=3000 pm2-runtime npm -- start 2>&1 | sed 's/^/[Frontend]: /') &
-# Starting nginx
-nginx
+# Starting nginx in foreground to keep the container alive
+nginx -g 'daemon off;'
